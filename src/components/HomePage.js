@@ -145,7 +145,7 @@ class HomePage extends Component {
 
     // Use navigate prop to redirect to SignIn page
     const { navigate } = this.props;
-    navigate("/SignIn", { replace: true });
+    navigate("/sign-in", { replace: true });
   };
 
   render() {
