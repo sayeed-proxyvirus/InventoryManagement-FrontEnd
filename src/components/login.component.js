@@ -30,7 +30,7 @@ const Login = () => {
     }
   };
   
-
+//export const ADMIN_HASH = "$2a$12$8weNUKx3A5Kxjm1nDYs2RucCtncVUESCqsiJQuex3hrUSOP7hKvhq";
 
 
 const handleSubmit = async (e) => {
