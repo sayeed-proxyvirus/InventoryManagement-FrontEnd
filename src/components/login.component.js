@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./formstyles.css";
 import bcrypt from "bcryptjs";
-//import axios from "axios";
-import { ADMIN_HASH } from './config';
+import axios from "axios";
+import { ADMIN_HASH } from "./config";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +14,7 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const API_URL = "https://localhost:44353/api/CrudApplication";
+  const API_URL = "https://localhost:44359/INVApplication";
 
   const checkValidation = () => {
     console.log("CheckValidation Calling...");
@@ -29,50 +29,69 @@ const Login = () => {
       setPasswordFlag(true);
     }
   };
-  
-//export const ADMIN_HASH = "$2a$12$8weNUKx3A5Kxjm1nDYs2RucCtncVUESCqsiJQuex3hrUSOP7hKvhq";
+
+  //export const ADMIN_HASH = "$2a$12$8weNUKx3A5Kxjm1nDYs2RucCtncVUESCqsiJQuex3hrUSOP7hKvhq";
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    checkValidation();
+
+    if (email !== "" && password !== "") {
+      console.log("Acceptable");
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  checkValidation();
+      const hashedAdminPassword = ADMIN_HASH;
 
-  if (email !== "" && password !== "") {
-    console.log("Acceptable");
-    
-    // Use the imported hash instead of environment variable
-    const hashedAdminPassword = ADMIN_HASH;
 
-    // Add debugging and validation
-    console.log("Input password:", password);
-    console.log("Hashed password:", hashedAdminPassword);
-
-    // Validate inputs before bcrypt.compare
-    if (!password) {
-      alert("Please enter a password");
-      return;
-    }
-
-    if (!hashedAdminPassword) {
-      alert("Server configuration error");
-      console.error("Hash not found in config");
-      return;
-    }
-
-    try {
-      const isMatch = await bcrypt.compare(password, hashedAdminPassword);
-      if (isMatch) {
-        // Login successful
-        navigate("HomePage");
-      } else {
-        alert("Invalid password");
+      if (!password) {
+        alert("Please enter a password");
+        return;
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Login failed");
+
+      if (!hashedAdminPassword) {
+        alert("Server configuration error");
+        console.error("Hash not found in config");
+        return;
+      }
+
+      // Admin shortcut - simplified for demo
+      if (role === "Admin" && email === "Sayeed") {
+        try {
+          const isMatch = await bcrypt.compare(password, hashedAdminPassword);
+          if (isMatch) {
+            // Login successful
+            navigate("HomePage");
+          } else {
+            alert("Invalid password");
+          }
+        } catch (error) {
+          console.error("Login error:", error);
+          alert("Login failed");
+        }
+      }
+      const data = {
+        userName: email,
+        password: password,
+        role: role,
+      };
+
+      const url = `${API_URL}/Login`;
+
+      try {
+        const result = await axios.post(url, data);
+        alert(`Welcome '${email}' !!`);
+        console.log("Login Successful");
+        navigate("/homepage");
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("Login failed. Please check your credentials.");
+      }
+    } else {
+      console.log("Not Acceptable");
+      setOpen(true);
+      setMessage("Please Fill Mandatory Fields");
     }
-  }
-};
+  };
 
   return (
     <>
