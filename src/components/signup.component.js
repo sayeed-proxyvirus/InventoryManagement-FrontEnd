@@ -1,38 +1,28 @@
 import React, { useState } from 'react';
+import './formstyles.css';
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add your signup logic here
-    console.log('SignUp:', { firstName, lastName, email, password });
+    console.log('SignUp:', { userName,  email, password });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
       <div className="mb-3">
-        <label>First name</label>
+        <label>User name</label>
         <input
           type="text"
           className="form-control"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label>Last name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          placeholder="User name"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
         />
       </div>
       <div className="mb-3">

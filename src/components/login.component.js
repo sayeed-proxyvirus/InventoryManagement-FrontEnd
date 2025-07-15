@@ -1,60 +1,174 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import "./formstyles.css";
+import bcrypt from "bcryptjs";
+//import axios from "axios";
+import { ADMIN_HASH } from './config';
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [userNameFlag, setUserNameFlag] = useState(false);
+  const [passwordFlag, setPasswordFlag] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your login logic here
-    console.log("Login:", { email, password });
+  const API_URL = "https://localhost:44353/api/CrudApplication";
+
+  const checkValidation = () => {
+    console.log("CheckValidation Calling...");
+
+    setUserNameFlag(false);
+    setPasswordFlag(false);
+
+    if (email === "") {
+      setUserNameFlag(true);
+    }
+    if (password === "") {
+      setPasswordFlag(true);
+    }
   };
+  
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  checkValidation();
+
+  if (email !== "" && password !== "") {
+    console.log("Acceptable");
+    
+    // Use the imported hash instead of environment variable
+    const hashedAdminPassword = ADMIN_HASH;
+
+    // Add debugging and validation
+    console.log("Input password:", password);
+    console.log("Hashed password:", hashedAdminPassword);
+
+    // Validate inputs before bcrypt.compare
+    if (!password) {
+      alert("Please enter a password");
+      return;
+    }
+
+    if (!hashedAdminPassword) {
+      alert("Server configuration error");
+      console.error("Hash not found in config");
+      return;
+    }
+
+    try {
+      const isMatch = await bcrypt.compare(password, hashedAdminPassword);
+      if (isMatch) {
+        // Login successful
+        navigate("HomePage");
+      } else {
+        alert("Invalid password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed");
+    }
+  }
+};
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Sign In</h3>
-      <div className="mb-3">
-        <label>Email address</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div className="mb-3">
-        <div className="custom-control custom-checkbox">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id="customCheck1"
-          />
-          <label className="custom-control-label mx-2" htmlFor="customCheck1">
-            Remember me
-          </label>
+    <>
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <form onSubmit={handleSubmit}>
+              <h3 className="text-center mb-4">Sign In</h3>
+
+              {/* Role Selection */}
+              <div className="mb-3">
+                <label className="form-label">Role</label>
+                <select
+                  className="form-control"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <option value="">Select Role</option>
+                  <option value="Admin">Admin</option>
+                  <option value="User">User</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">User Name</label>
+                <input
+                  type="text"
+                  className={`form-control ${userNameFlag ? "is-invalid" : ""}`}
+                  placeholder="User Name"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {userNameFlag && (
+                  <div className="invalid-feedback">Username is required</div>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  className={`form-control ${passwordFlag ? "is-invalid" : ""}`}
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {passwordFlag && (
+                  <div className="invalid-feedback">Password is required</div>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="customCheck1"
+                  />
+                  <label className="form-check-label" htmlFor="customCheck1">
+                    Remember me
+                  </label>
+                </div>
+              </div>
+
+              {open && (
+                <div className="alert alert-danger" role="alert">
+                  {message}
+                </div>
+              )}
+
+              <div className="d-grid gap-2">
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => navigate("/sign-up")}
+                >
+                  Sign Up
+                </button>
+              </div>
+
+              <p className="text-center mt-3">
+                Forgot <a href="#">password?</a>
+              </p>
+            </form>
+          </div>
         </div>
       </div>
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </div>
 
-      <p className="forgot-password text-right">
-        Forgot <a href="#">password?</a>
-      </p>
-    </form>
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+      />
+    </>
   );
 };
 
