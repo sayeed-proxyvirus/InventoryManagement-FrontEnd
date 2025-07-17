@@ -64,16 +64,16 @@ class HomePage extends Component {
   handleCItemTrans = async () => {
     try {
       const response = await axios.get(
-        `https://localhost:44353/api/CrudApplication/ECReadInformation`
+        `https://localhost:44359/INVApplication/ItemTransCInfoView`
       );
 
       if (response.data?.isSuccess) {
         this.setState({
-          employeeCount: response.data.ecreadInformation[0].count || 0,
+          ItemTransCount: response.data.itcreadinformation[0].count || 0,
         });
       }
     } catch (err) {
-      console.error("Error fetching employee data:", err);
+      console.error("Error fetching Item Transactions data:", err);
       this.setState({
         employeeCount: 0,
       });
@@ -83,16 +83,16 @@ class HomePage extends Component {
   handleCGodown = async () => {
     try {
       const response = await axios.get(
-        `https://localhost:44353/api/CrudApplication/WCReadInformation`
+        `https://localhost:44359/INVApplication/GDCInfoView`
       );
 
       if (response.data?.isSuccess) {
         this.setState({
-          workerCount: response.data.wcreadInformation[0].count || 0,
+          GodownCount: response.data.gdcreadinformation[0].count || 0,
         });
       }
     } catch (err) {
-      console.error("Error fetching worker data:", err);
+      console.error("Error fetching GoDown data:", err);
       this.setState({
         workerCount: 0,
       });
@@ -102,16 +102,16 @@ class HomePage extends Component {
   handleCSupplier = async () => {
     try {
       const response = await axios.get(
-        `https://localhost:44353/api/CrudApplication/JCReadInformation`
+        `https://localhost:44359/INVApplication/SupplierCInfoView`
       );
 
       if (response.data?.isSuccess) {
         this.setState({
-          jobCount: response.data.jcreadInformation[0].count || 0,
+          SupplierCount: response.data.supcreadinformation[0].count || 0,
         });
       }
     } catch (err) {
-      console.error("Error fetching jobs data:", err);
+      console.error("Error fetching Supplier data:", err);
       this.setState({
         jobCount: 0,
       });
@@ -121,16 +121,16 @@ class HomePage extends Component {
   handleCItems = async () => {
     try {
       const response = await axios.get(
-        `https://localhost:44353/api/CrudApplication/JSCReadInformation`
+        `https://localhost:44359/INVApplication/ItemCInfoView`
       );
 
       if (response.data?.isSuccess) {
         this.setState({
-          sectionsCount: response.data.jscreadInformation[0].count || 0,
+          ItemTransCount: response.data.icreadinformation[0].count || 0,
         });
       }
     } catch (err) {
-      console.error("Error fetching employee data:", err);
+      console.error("Error fetching Item data:", err);
       this.setState({
         sectionsCount: 0,
       });
@@ -149,13 +149,7 @@ class HomePage extends Component {
   };
 
   render() {
-    const {
-      activeSubmenu,
-      ItemTransCount,
-      workerCount,
-      jobCount,
-      sectionsCount,
-    } = this.state;
+    const { activeSubmenu } = this.state;
     const { navigate } = this.props; // Access navigate from props
 
     return (
@@ -385,7 +379,7 @@ class HomePage extends Component {
             font-weight: 600;
             flex: 1;
             font-size: 0.9rem;
-            letter-spacing : 0.02rem;
+            letter-spacing: 0.02rem;
           }
 
           .nav-badge {
@@ -778,42 +772,14 @@ class HomePage extends Component {
                     onClick={(e) => {
                       e.preventDefault();
                       this.toggleSubmenu("employee");
+                      navigate("/InventoryItems");
                     }}
                   >
                     <span className="nav-icon">⚑</span>
-                    <span className="nav-text">Employee</span>
-                    <span className="chevron">▼</span>
+                    <span className="nav-text">Inventory Items</span>
+                    
                   </a>
-                  <ul
-                    className={`submenu ${
-                      activeSubmenu === "employee" ? "open" : ""
-                    }`}
-                  >
-                    <li className="submenu-item">
-                      <a href="#" className="submenu-link">
-                        <span className="feature-dot"></span>
-                        Analytics
-                      </a>
-                    </li>
-                    <li className="submenu-item">
-                      <a href="#" className="submenu-link">
-                        <span className="feature-dot"></span>
-                        Reports
-                      </a>
-                    </li>
-                    <li className="submenu-item">
-                      <a href="#" className="submenu-link">
-                        <span className="feature-dot"></span>
-                        Metrics
-                        <span
-                          className="nav-badge"
-                          style={{ marginLeft: "auto" }}
-                        >
-                          New
-                        </span>
-                      </a>
-                    </li>
-                  </ul>
+                  
                 </li>
 
                 <li className="nav-item">
@@ -829,32 +795,9 @@ class HomePage extends Component {
                   >
                     <span className="nav-icon">⚒</span>
                     <span className="nav-text">Worker</span>
-                    <span className="chevron">▼</span>
+                    
                   </a>
-                  <ul
-                    className={`submenu ${
-                      activeSubmenu === "worker" ? "open" : ""
-                    }`}
-                  >
-                    <li className="submenu-item">
-                      <a href="#" className="submenu-link">
-                        <span className="feature-dot"></span>
-                        Analytics
-                      </a>
-                    </li>
-                    <li className="submenu-item">
-                      <a href="#" className="submenu-link">
-                        <span className="feature-dot"></span>
-                        Reports
-                      </a>
-                    </li>
-                    <li className="submenu-item">
-                      <a href="#" className="submenu-link">
-                        <span className="feature-dot"></span>
-                        Metrics
-                      </a>
-                    </li>
-                  </ul>
+                  
                 </li>
 
                 <li className="nav-item">
@@ -1033,21 +976,21 @@ class HomePage extends Component {
               <div className="dashboard-card">
                 <div className="card-icon"></div>
                 <h3 className="card-title">Total Employees</h3>
-                <div className="card-value">{ItemTransCount}</div>
+                <div className="card-value">{this.state.ItemsCount}</div>
                 <p className="card-description">Active employees in system</p>
               </div>
 
               <div className="dashboard-card">
                 <div className="card-icon"></div>
                 <h3 className="card-title">Total Workers</h3>
-                <div className="card-value">{workerCount}</div>
+                <div className="card-value">{this.state.SupplierCount}</div>
                 <p className="card-description">Active workers in system</p>
               </div>
 
               <div className="dashboard-card">
                 <div className="card-icon"></div>
                 <h3 className="card-title">Total Job Sections</h3>
-                <div className="card-value">{jobCount}</div>
+                <div className="card-value">{this.state.GodownCount}</div>
                 <p className="card-description">
                   Active job sections in system
                 </p>
@@ -1056,7 +999,7 @@ class HomePage extends Component {
               <div className="dashboard-card">
                 <div className="card-icon"></div>
                 <h3 className="card-title">Total Job Designations</h3>
-                <div className="card-value">{sectionsCount}</div>
+                <div className="card-value">{this.state.ItemTransCount}</div>
                 <p className="card-description">
                   Active job designations in system
                 </p>
