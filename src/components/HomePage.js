@@ -627,7 +627,7 @@ class HomePage extends Component {
             height: 3px;
             background: linear-gradient(90deg, #74b9ff, #0984e3, #74b9ff);
             background-size: 200% 100%;
-            animation: shimmer 2s infinite;
+            animation: shimmer 2s infinite;  /*card up animation*/
           }
 
           .dashboard-card:hover {

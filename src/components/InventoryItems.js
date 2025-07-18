@@ -483,8 +483,9 @@ const ItemDataTable = () => {
       
       const category = categories.find((s) => s.categoryName === value);
       if (category) {
+        console.log(category.categoryID);
         fetchsubcategories(category.categoryID);
-        console.log(category);
+        
       } // value is the categoryID
     }
   };
@@ -575,7 +576,7 @@ const ItemDataTable = () => {
           height: 3px;
           background: linear-gradient(90deg, #74b9ff, #0984e3, #74b9ff);
           background-size: 200% 100%;
-          animation: shimmer 2s infinite;
+          animation: shimmer 2s infinite; /*card up animation*/
         }
 
         .glass-card:hover {
@@ -1139,7 +1140,7 @@ const ItemDataTable = () => {
                 <Form.Group className="mb-3" style={{ marginTop: 0 }}>
                   <Form.Label>Item Code</Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     name="itemCode"
                     value={formData.itemCode}
                     onChange={handleInputChange}
